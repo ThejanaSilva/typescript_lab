@@ -1,13 +1,14 @@
-import type { BingoSquareData } from '../types';
+import type { BingoSquareData, GameMode } from '../types';
 import { BingoSquare } from './BingoSquare';
 
 interface BingoBoardProps {
+  mode: GameMode;
   board: BingoSquareData[];
   winningSquareIds: Set<number>;
   onSquareClick: (squareId: number) => void;
 }
 
-export function BingoBoard({ board, winningSquareIds, onSquareClick }: BingoBoardProps) {
+export function BingoBoard({ mode, board, winningSquareIds, onSquareClick }: BingoBoardProps) {
   return (
     <>
       <div className="absolute -inset-12 opacity-20 pointer-events-none">
@@ -18,6 +19,7 @@ export function BingoBoard({ board, winningSquareIds, onSquareClick }: BingoBoar
         {board.map((square) => (
           <BingoSquare
             key={square.id}
+            mode={mode}
             square={square}
             isWinning={winningSquareIds.has(square.id)}
             onClick={() => onSquareClick(square.id)}

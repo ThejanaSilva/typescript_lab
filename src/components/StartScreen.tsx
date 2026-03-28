@@ -1,8 +1,13 @@
+import { useState } from 'react';
+import type { GameMode } from '../types';
+
 interface StartScreenProps {
-  onStart: () => void;
+  onStart: (mode: GameMode) => void;
 }
 
 export function StartScreen({ onStart }: StartScreenProps) {
+  const [selectedMode, setSelectedMode] = useState<GameMode>('bingo');
+
   return (
     <div className="cyber-screen flex flex-col items-center justify-center min-h-full p-6 gap-8">
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -18,6 +23,39 @@ export function StartScreen({ onStart }: StartScreenProps) {
         <p className="text-xl cyber-muted mb-10 uppercase tracking-[0.18em] font-bold" style={{textShadow: '0 0 10px rgba(0,255,255,0.3)'}}>
           ~ Social Bingo ~
         </p>
+
+        <div className="cyber-panel rounded-lg p-4 mb-5 border-2 border-cyan-500/60">
+          <h2 className="font-bold text-[color:var(--color-neon-yellow)] mb-3 uppercase tracking-[0.12em] text-sm">Select Mode</h2>
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => setSelectedMode('bingo')}
+              className={`rounded-lg px-3 py-2 text-xs font-bold uppercase tracking-wider border transition-all ${
+                selectedMode === 'bingo'
+                  ? 'border-cyan-300 bg-cyan-400/20 text-cyan-200 shadow-[0_0_12px_rgba(0,255,255,0.35)]'
+                  : 'border-cyan-500/40 text-cyan-100/80 hover:bg-cyan-500/10'
+              }`}
+            >
+              Bingo
+            </button>
+            <button
+              type="button"
+              onClick={() => setSelectedMode('scavenger')}
+              className={`rounded-lg px-3 py-2 text-xs font-bold uppercase tracking-wider border transition-all ${
+                selectedMode === 'scavenger'
+                  ? 'border-fuchsia-300 bg-fuchsia-400/20 text-fuchsia-200 shadow-[0_0_12px_rgba(255,0,255,0.35)]'
+                  : 'border-fuchsia-500/40 text-fuchsia-100/80 hover:bg-fuchsia-500/10'
+              }`}
+            >
+              Scavenger
+            </button>
+          </div>
+          <p className="cyber-muted text-xs mt-3">
+            {selectedMode === 'bingo'
+              ? 'Complete any 5-in-a-row line to win.'
+              : 'Mark every non-free square to complete the hunt.'}
+          </p>
+        </div>
         
         <div className="cyber-panel rounded-lg p-8 mb-10 border-2 border-magenta-500/60 relative overflow-hidden group">
           <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/0 via-magenta-500/5 to-cyan-500/0 group-hover:via-magenta-500/10 transition-all duration-300" />
@@ -39,7 +77,7 @@ export function StartScreen({ onStart }: StartScreenProps) {
         </div>
 
         <button
-          onClick={onStart}
+          onClick={() => onStart(selectedMode)}
           className="cyber-button w-full font-extrabold py-4 px-8 rounded-lg text-lg transition-all uppercase tracking-wider relative overflow-hidden group"
         >
           <span className="relative z-10">▶ START MISSION ◀</span>

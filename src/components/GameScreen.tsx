@@ -1,21 +1,26 @@
-import type { BingoSquareData } from '../types';
+import type { BingoSquareData, GameMode } from '../types';
 import { BingoBoard } from './BingoBoard';
 
 interface GameScreenProps {
+  mode: GameMode;
   board: BingoSquareData[];
   winningSquareIds: Set<number>;
-  hasBingo: boolean;
+  isComplete: boolean;
   onSquareClick: (squareId: number) => void;
   onReset: () => void;
 }
 
 export function GameScreen({
+  mode,
   board,
   winningSquareIds,
-  hasBingo,
+  isComplete,
   onSquareClick,
   onReset,
 }: GameScreenProps) {
+  const scavengerTarget = board.filter((square) => !square.isFreeSpace).length;
+  const scavengerMarked = board.filter((square) => !square.isFreeSpace && square.isMarked).length;
+
   return (
     <div className="cyber-screen flex flex-col min-h-full">
       <header className="cyber-header flex items-center justify-between p-4 gap-4">
@@ -35,17 +40,36 @@ export function GameScreen({
       </header>
 
       <p className="text-center cyber-muted text-xs py-2.5 px-4 font-semibold tracking-wider uppercase bg-[rgb(var(--neon-cyan-rgb)/0.08)] border-y border-[rgb(var(--neon-cyan-rgb)/0.2)]">
-        ► Find your match ◄
+        {mode === 'bingo' ? '► Find your match ◄' : '► Track every square ◄'}
       </p>
 
-      {hasBingo && (
+      <div className="py-2 px-4 flex justify-center">
+        <span
+          className={`rounded-full border px-3 py-1 text-[10px] font-extrabold tracking-[0.18em] uppercase ${
+            mode === 'bingo'
+              ? 'border-cyan-300/70 text-cyan-200 bg-cyan-500/10 shadow-[0_0_12px_rgba(0,255,255,0.25)]'
+              : 'border-fuchsia-300/70 text-fuchsia-200 bg-fuchsia-500/10 shadow-[0_0_12px_rgba(255,0,255,0.25)]'
+          }`}
+        >
+          Mode: {mode === 'bingo' ? 'Bingo' : 'Scavenger'}
+        </span>
+      </div>
+
+      {mode === 'scavenger' && (
+        <p className="text-center text-xs py-2 px-4 font-semibold tracking-wider uppercase text-[color:var(--color-neon-yellow)] bg-[rgb(var(--neon-yellow-rgb)/0.08)] border-b border-[rgb(var(--neon-yellow-rgb)/0.25)]">
+          Progress: {scavengerMarked}/{scavengerTarget}
+        </p>
+      )}
+
+      {isComplete && (
         <div className="cyber-status text-center py-3 font-extrabold text-sm tracking-widest animate-pulse" style={{animationDuration: '0.8s'}}>
-          ◈ 🎉 B I N G O ! 🎉 ◈
+          {mode === 'bingo' ? '◈ 🎉 B I N G O ! 🎉 ◈' : '◈ 🕶️ H U N T   C O M P L E T E ! ◈'}
         </div>
       )}
 
       <div className="flex-1 flex flex-col items-center justify-center p-4 gap-6">
         <BingoBoard
+          mode={mode}
           board={board}
           winningSquareIds={winningSquareIds}
           onSquareClick={onSquareClick}

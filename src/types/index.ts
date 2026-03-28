@@ -13,4 +13,6 @@ export interface BingoLine {
   squares: number[];
 }
 
+export type GameMode = 'bingo' | 'scavenger';
+
 export type GameState = 'start' | 'playing' | 'bingo';
