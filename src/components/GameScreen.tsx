@@ -17,38 +17,43 @@ export function GameScreen({
   onReset,
 }: GameScreenProps) {
   return (
-    <div className="flex flex-col min-h-full bg-gray-50">
-      {/* Header */}
-      <header className="flex items-center justify-between p-3 bg-white border-b border-gray-200">
+    <div className="cyber-screen flex flex-col min-h-full">
+      <header className="cyber-header flex items-center justify-between p-4 gap-4">
         <button
           onClick={onReset}
-          className="text-gray-500 text-sm px-3 py-1.5 rounded active:bg-gray-100"
+          className="px-4 py-2 rounded border-2 border-[rgb(var(--neon-cyan-rgb)/0.6)] text-[color:var(--color-neon-cyan)] font-bold uppercase tracking-wider hover:bg-[rgb(var(--neon-cyan-rgb)/0.15)] active:bg-[rgb(var(--neon-cyan-rgb)/0.25)] transition-all shadow-lg shadow-cyan-500/30 text-sm"
         >
-          ← Back
+          ← BACK
         </button>
-        <h1 className="font-bold text-gray-900">Soc Ops</h1>
-        <div className="w-16"></div>
+        <div className="flex-1 text-center">
+          <h1 className="font-bold cyber-title tracking-[0.15em] text-3xl" style={{textShadow: '0 0 20px rgba(0,255,255,0.6), 0 0 40px rgba(255,0,255,0.3)'}}>
+            Soc Ops
+          </h1>
+          <div className="h-0.5 w-full bg-gradient-to-r from-transparent via-cyan-500 to-transparent mt-2" />
+        </div>
+        <div className="w-20" />
       </header>
 
-      {/* Instructions */}
-      <p className="text-center text-gray-500 text-sm py-2 px-4">
-        Tap a square when you find someone who matches it.
+      <p className="text-center cyber-muted text-xs py-2.5 px-4 font-semibold tracking-wider uppercase bg-[rgb(var(--neon-cyan-rgb)/0.08)] border-y border-[rgb(var(--neon-cyan-rgb)/0.2)]">
+        ► Find your match ◄
       </p>
 
-      {/* Bingo indicator */}
       {hasBingo && (
-        <div className="bg-amber-100 text-amber-800 text-center py-2 font-semibold text-sm">
-          🎉 BINGO! You got a line!
+        <div className="cyber-status text-center py-3 font-extrabold text-sm tracking-widest animate-pulse" style={{animationDuration: '0.8s'}}>
+          ◈ 🎉 B I N G O ! 🎉 ◈
         </div>
       )}
 
-      {/* Board */}
-      <div className="flex-1 flex items-center justify-center p-3">
+      <div className="flex-1 flex flex-col items-center justify-center p-4 gap-6">
         <BingoBoard
           board={board}
           winningSquareIds={winningSquareIds}
           onSquareClick={onSquareClick}
         />
+      </div>
+
+      <div className="pb-4 px-4 text-center text-xs cyber-muted font-mono tracking-tight opacity-70">
+        [SYSTEM STATUS: OPERATIONAL]
       </div>
     </div>
   );
